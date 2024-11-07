@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Typography, Image, Button, Divider, Row, Col, Breadcrumb, Modal, Spin, Form, Input, Select, notification, Steps, Tooltip} from "antd";
-import { ShoppingOutlined, UserOutlined, QuestionCircleOutlined, ShoppingCartOutlined} from "@ant-design/icons";
+import { Typography, Image, Button, Divider, Row, Col, Breadcrumb, Modal, Spin, Form, Input, Select, notification, Steps, Tooltip } from "antd";
+import { ShoppingOutlined, UserOutlined, QuestionCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -57,6 +57,7 @@ const DetailsProductComponent = () => {
             notification.error({
                 message: "Error",
                 description: "Unable to fetch product details.",
+                placement: "topRight",
             });
         }
     };
@@ -89,6 +90,7 @@ const DetailsProductComponent = () => {
             notification.error({
                 message: "Incomplete Form",
                 description: "Please complete all required fields in the shipping information.",
+                placement: "topRight",
             });
         }
     };
@@ -127,6 +129,7 @@ const DetailsProductComponent = () => {
                 notification.success({
                     message: "Transaction Successful",
                     description: "Your purchase has been recorded.",
+                    placement: "topRight",
                 });
                 setIsModalVisible(false);
                 navigate("/transactions/own");
@@ -137,6 +140,7 @@ const DetailsProductComponent = () => {
             notification.error({
                 message: "Purchase Error",
                 description: "Please complete all required fields and try again.",
+                placement: "topRight",
             });
             console.error("Purchase failed:", error);
         } finally {

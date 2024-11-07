@@ -3,7 +3,7 @@ import { Table, Button, Input, Popconfirm, Space, Typography, notification, Row,
 import { Link } from "react-router-dom";
 import { SearchOutlined, EditOutlined, DeleteOutlined, AppstoreTwoTone } from "@ant-design/icons";
 
-let ListMyProductsComponent = () => {
+const ListMyProductsComponent = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,30 +15,34 @@ let ListMyProductsComponent = () => {
 
     const getMyProducts = async () => {
         setLoading(true);
-        let response = await fetch(
-            process.env.REACT_APP_BACKEND_BASE_URL + "/products/own/",
-            {
-                method: "GET",
-                headers: {
-                    "apikey": localStorage.getItem("apiKey"),
-                },
-            }
-        );
+        try {
+            const response = await fetch(
+                `${process.env.REACT_APP_BACKEND_BASE_URL}/products/own/`,
+                {
+                    method: "GET",
+                    headers: {
+                        "apikey": localStorage.getItem("apiKey"),
+                    },
+                }
+            );
 
-        if (response.ok) {
-            let jsonData = await response.json();
-            jsonData.map((product) => {
-                product.key = product.id;
-                return product;
-            });
-            jsonData.sort((a, b) => new Date(b.date) - new Date(a.date));
-            setProducts(jsonData);
-            setFilteredProducts(jsonData);
-            calculateTotalSales(jsonData);
+            if (response.ok) {
+                const jsonData = await response.json();
+                jsonData.forEach((product) => {
+                    product.key = product.id;
+                });
+                jsonData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setProducts(jsonData);
+                setFilteredProducts(jsonData);
+                calculateTotalSales(jsonData);
+            } else {
+                const responseBody = await response.json();
+                responseBody.errors.forEach((e) => console.error("Error: " + e.msg));
+            }
+        } catch (error) {
+            console.error("Error fetching products: ", error);
+        } finally {
             setLoading(false);
-        } else {
-            let responseBody = await response.json();
-            responseBody.errors.forEach((e) => console.log("Error: " + e.msg));
         }
     };
 
@@ -58,30 +62,34 @@ let ListMyProductsComponent = () => {
     };
 
     const deleteProduct = async (id) => {
-        let response = await fetch(
-            process.env.REACT_APP_BACKEND_BASE_URL + "/products/" + id,
-            {
-                method: "DELETE",
-                headers: {
-                    "apikey": localStorage.getItem("apiKey"),
-                },
+        try {
+            const response = await fetch(
+                `${process.env.REACT_APP_BACKEND_BASE_URL}/products/${id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "apikey": localStorage.getItem("apiKey"),
+                    },
+                }
+            );
+
+            if (response.ok) {
+                const updatedProducts = products.filter((p) => p.id !== id);
+                setProducts(updatedProducts);
+                setFilteredProducts(updatedProducts);
+                calculateTotalSales(updatedProducts);
+
+                notification.success({
+                    message: 'Product Deleted',
+                    description: 'The product has been successfully deleted.',
+                    placement: 'topRight',
+                });
+            } else {
+                const responseBody = await response.json();
+                responseBody.errors.forEach((e) => console.error("Error: " + e.msg));
             }
-        );
-
-        if (response.ok) {
-            const updatedProducts = products.filter((p) => p.id !== id);
-            setProducts(updatedProducts);
-            setFilteredProducts(updatedProducts);
-            calculateTotalSales(updatedProducts);
-
-            notification.success({
-                message: 'Product Deleted',
-                description: 'The product has been successfully deleted.',
-                placement: 'bottomRight',
-            });
-        } else {
-            let responseBody = await response.json();
-            responseBody.errors.forEach((e) => console.log("Error: " + e.msg));
+        } catch (error) {
+            console.error("Error deleting product: ", error);
         }
     };
 

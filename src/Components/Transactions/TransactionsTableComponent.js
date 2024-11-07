@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Typography, notification } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Table, Typography, notification } from "antd";
+import { Link } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -33,8 +33,9 @@ const TransactionsTableComponent = ({ transactions, role, showProfileLink = true
                     } catch (error) {
                         console.error("Error getting product price:", error);
                         notification.error({
-                            message: 'Error',
-                            description: 'Unable to get product price.',
+                            message: "Error",
+                            description: "Unable to get product price.",
+                            placement: "topRight",
                         });
                     }
                 } else {
@@ -76,7 +77,7 @@ const TransactionsTableComponent = ({ transactions, role, showProfileLink = true
             key: "userId",
             render: (userId) => (
                 showProfileLink ? (
-                    <Link style={{color: "#fb3188"}} to={`/users/${userId}`}>View {role === "buyer" ? "Seller" : "Buyer"} Profile</Link>
+                    <Link style={{ color: "#fb3188" }} to={`/users/${userId}`}>View {role === "buyer" ? "Seller" : "Buyer"} Profile</Link>
                 ) : (
                     <Text>{userId}</Text>
                 )

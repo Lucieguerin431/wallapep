@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Card, Typography, notification, Spin, Table, Avatar, Row, Col, Divider, Tag } from 'antd';
-import { ShoppingCartOutlined, DollarCircleOutlined, AppstoreOutlined} from '@ant-design/icons';
-import TransactionsTableComponent from '../Transactions/TransactionsTableComponent';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Card, Typography, notification, Spin, Table, Avatar, Row, Col, Divider, Tag } from "antd";
+import { ShoppingCartOutlined, DollarCircleOutlined, AppstoreOutlined } from "@ant-design/icons";
+import TransactionsTableComponent from "../Transactions/TransactionsTableComponent";
 import { timestampToString } from "../../Utils/UtilsDates";
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 const UserProfilComponent = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [user, setUser] = useState(null);
     const [purchases, setPurchases] = useState([]);
     const [sales, setSales] = useState([]);
@@ -35,12 +34,13 @@ const UserProfilComponent = () => {
                 const data = await response.json();
                 setUser(data);
             } else {
-                throw new Error('Failed to get user data');
+                throw new Error("Failed to get user data");
             }
         } catch (error) {
             notification.error({
-                message: 'Error',
-                description: 'Unable to get user data.',
+                message: "Error",
+                description: "Unable to get user data.",
+                placement: "topRight",
             });
         }
     };
@@ -62,12 +62,13 @@ const UserProfilComponent = () => {
                 setPurchases(dataPurchases); 
                 setSales(dataSales);        
             } else {
-                throw new Error('Failed to get transactions');
+                throw new Error("Failed to get transactions");
             }
         } catch (error) {
             notification.error({
-                message: 'Error',
-                description: 'Unable to get transactions.',
+                message: "Error",
+                description: "Unable to get transactions.",
+                placement: "topRight",
             });
         }
         setLoading(false);
@@ -86,12 +87,13 @@ const UserProfilComponent = () => {
                 });
                 setProducts(data);
             } else {
-                throw new Error('Failed to get products');
+                throw new Error("Failed to get products");
             }
         } catch (error) {
             notification.error({
-                message: 'Error',
-                description: 'Unable to get user products.',
+                message: "Error",
+                description: "Unable to get user products.",
+                placement: "topRight",
             });
         }
     };
@@ -131,22 +133,19 @@ const UserProfilComponent = () => {
         );
     }
     
-
     return (
         <div style={{ padding: "20px 50px" }}>
-            <div style={{ display: "flex", justifyContent: "center",  }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 <Card
                     style={{
                         background: "#C4DBFB",
                         borderRadius: "10px",
                         padding: "20px 50px",
                         marginBottom: "30px",
-            
-                            width: "40%",
-                            maxWidth: "700px",
-                            minWidth: "400px",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" 
-                        
+                        width: "40%",
+                        maxWidth: "700px",
+                        minWidth: "400px",
+                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" 
                     }}
                 >
                     <Row align="middle" gutter={[10, 10]} style={{ textAlign: "center" }}>
@@ -198,9 +197,8 @@ const UserProfilComponent = () => {
                         </Col>
                     </Row>
                 </Card>
-
             </div>
-            <Card title={<><ShoppingCartOutlined style={{ marginRight: "8px" }} /> Purchases ({purchases.length} items)</>} style={{ marginBottom: '20px' }}>
+            <Card title={<><ShoppingCartOutlined style={{ marginRight: "8px" }} /> Purchases ({purchases.length} items)</>} style={{ marginBottom: "20px" }}>
                 <TransactionsTableComponent
                     transactions={purchases}
                     role="buyer"
@@ -208,7 +206,7 @@ const UserProfilComponent = () => {
                 />
             </Card>
 
-            <Card title={<><DollarCircleOutlined style={{ marginRight: "8px" }} /> Sales ({sales.length} items)</>} style={{ marginBottom: '20px' }}>
+            <Card title={<><DollarCircleOutlined style={{ marginRight: "8px" }} /> Sales ({sales.length} items)</>} style={{ marginBottom: "20px" }}>
                 <TransactionsTableComponent
                     transactions={sales}
                     role="seller"

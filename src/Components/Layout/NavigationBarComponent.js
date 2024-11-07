@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Layout, Menu, Avatar, Row, Col, Divider } from "antd";
-import { PlusOutlined, UserOutlined, DollarCircleOutlined, AppstoreOutlined, LogoutOutlined, DownOutlined, ShoppingOutlined, AppstoreTwoTone, DollarCircleTwoTone } from "@ant-design/icons";
+import { Layout, Menu, Avatar, Row, Col } from "antd";
+import { PlusOutlined, UserOutlined, LogoutOutlined, DownOutlined, ShoppingOutlined, AppstoreTwoTone, DollarCircleTwoTone } from "@ant-design/icons";
 
 const NavigationBarComponent = ({ login, disconnect }) => {
     const { Header } = Layout;

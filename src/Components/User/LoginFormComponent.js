@@ -28,7 +28,7 @@ const LoginFormComponent = ({ setLogin, openNotification }) => {
         if (response.ok) {
             let responseBody = await response.json();
             if (responseBody.apiKey && responseBody.email) {
-                localStorage.setItem('id', responseBody.id); 
+                localStorage.setItem("id", responseBody.id); 
                 localStorage.setItem("apiKey", responseBody.apiKey);
                 localStorage.setItem("email", responseBody.email);
             }
@@ -40,7 +40,7 @@ const LoginFormComponent = ({ setLogin, openNotification }) => {
             let serverErrors = responseBody.errors;
             setServerErrors(serverErrors, setFormErrors);
             let notificationMsg = joinAllServerErrorMessages(serverErrors);
-            openNotification("top", notificationMsg, "error");
+            openNotification("topRight", notificationMsg, "error");
         }
     };
 

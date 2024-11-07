@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Spin, notification, Row, Divider, Card } from 'antd';
-import { ShoppingCartOutlined, DollarCircleOutlined, DollarCircleTwoTone } from '@ant-design/icons';
-import TransactionsTableComponent from '../Transactions/TransactionsTableComponent';
+import React, { useEffect, useState } from "react";
+import { Typography, Spin, notification, Row, Divider, Card } from "antd";
+import { ShoppingCartOutlined, DollarCircleOutlined, DollarCircleTwoTone } from "@ant-design/icons";
+import TransactionsTableComponent from "../Transactions/TransactionsTableComponent";
 
 const { Title, Text } = Typography;
 
@@ -19,8 +19,9 @@ const TransactionListComponent = () => {
             getUserTransactions();
         } else {
             notification.error({
-                message: 'Error',
-                description: 'User ID not found. Please log in again.',
+                message: "Error",
+                description: "User ID not found. Please log in again.",
+                placement: "topRight",
             });
             setLoading(false);
         }
@@ -43,12 +44,13 @@ const TransactionListComponent = () => {
                 setPurchases(dataPurchases);
                 setSales(dataSales);
             } else {
-                throw new Error('Failed to get transactions');
+                throw new Error("Failed to get transactions");
             }
         } catch (error) {
             notification.error({
-                message: 'Error',
-                description: 'Unable to fetch transactions.',
+                message: "Error",
+                description: "Unable to fetch transactions.",
+                placement: "topRight",
             });
         }
         setLoading(false);

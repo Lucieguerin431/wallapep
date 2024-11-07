@@ -15,6 +15,7 @@ const CreateUserComponent = () => {
             notification.error({
                 message: "Password Mismatch",
                 description: "Passwords do not match. Please try again.",
+                placement: "topRight",
             });
             return;
         }
@@ -36,6 +37,7 @@ const CreateUserComponent = () => {
                 notification.success({
                     message: "Registration Successful",
                     description: "Your account has been created.",
+                    placement: "topRight",
                 });
                 navigate("/login");
             } else {
@@ -44,6 +46,7 @@ const CreateUserComponent = () => {
                     notification.error({
                         message: "Registration Error",
                         description: e.msg,
+                        placement: "topRight",
                     });
                 });
             }
@@ -51,6 +54,7 @@ const CreateUserComponent = () => {
             notification.error({
                 message: "Network Error",
                 description: "An error occurred while trying to register. Please try again later.",
+                placement: "topRight",
             });
         }
     };

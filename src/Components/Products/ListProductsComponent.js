@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { List, Card, Typography, Row, Col, Input, Select, Pagination } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProductCardComponent from "./ProductCardComponent";
 import { SearchOutlined, ShoppingTwoTone } from "@ant-design/icons";
 
-let ListProductsComponent = () => {
+const ListProductsComponent = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,8 +27,6 @@ let ListProductsComponent = () => {
         { label: "Over 1000€", min: 1000, max: Infinity },
     ];
 
-    
-
     useEffect(() => {
         getProducts();
 
@@ -40,45 +38,48 @@ let ListProductsComponent = () => {
     }, [location.search]);
 
     const getProducts = async () => {
-        let response = await fetch(process.env.REACT_APP_BACKEND_BASE_URL + "/products", {
-            method: "GET",
-            headers: {
-                "apikey": localStorage.getItem("apiKey")
-            },
-        });
-
-        if (response.ok) {
-            let jsonData = await response.json();
-            let promisesForImages = jsonData.map(async (p) => {
-                let urlImage = process.env.REACT_APP_BACKEND_BASE_URL + "/images/" + p.id + ".png";
-                let existsImage = await checkURL(urlImage);
-                p.image = existsImage ? urlImage : "/imageMockup.png";
-                return p;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products`, {
+                method: "GET",
+                headers: {
+                    "apikey": localStorage.getItem("apiKey")
+                },
             });
 
-            let productsWithImage = await Promise.all(promisesForImages);
-            setProducts(productsWithImage);
+            if (response.ok) {
+                const jsonData = await response.json();
+                const promisesForImages = jsonData.map(async (product) => {
+                    const urlImage = `${process.env.REACT_APP_BACKEND_BASE_URL}/images/${product.id}.png`;
+                    const existsImage = await checkURL(urlImage);
+                    product.image = existsImage ? urlImage : "/imageMockup.png";
+                    return product;
+                });
 
-            // Comptage des catégories pour les produits non vendus
-            const counts = productsWithImage.reduce((acc, product) => {
-                if (!product.buyerEmail) {  // Seuls les produits non vendus sont comptés
-                    acc[product.category] = (acc[product.category] || 0) + 1;
-                }
-                return acc;
-            }, {});
-            setCategoryCounts(counts);
-        } else {
-            let responseBody = await response.json();
-            let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg);
-            });
+                const productsWithImage = await Promise.all(promisesForImages);
+                setProducts(productsWithImage);
+
+                // Count categories for unsold products
+                const counts = productsWithImage.reduce((acc, product) => {
+                    if (!product.buyerEmail) {
+                        acc[product.category] = (acc[product.category] || 0) + 1;
+                    }
+                    return acc;
+                }, {});
+                setCategoryCounts(counts);
+            } else {
+                const responseBody = await response.json();
+                responseBody.errors.forEach(e => {
+                    console.error("Error: " + e.msg);
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching products: ", error);
         }
     };
 
     const checkURL = async (url) => {
         try {
-            let response = await fetch(url);
+            const response = await fetch(url);
             return response.ok;
         } catch (error) {
             return false;
@@ -98,15 +99,14 @@ let ListProductsComponent = () => {
                 product.price <= priceRange[1]
             );
         });
+        
         if (sortOrder === "desc") {
             filtered.sort((a, b) => a.price - b.price);
         } else if (sortOrder === "asc") {
             filtered.sort((a, b) => b.price - a.price);
         }
-        
-        filtered.sort((a, b) => {
-            return a.buyerEmail ? 1 : -1;
-        });
+
+        filtered.sort((a, b) => (a.buyerEmail ? 1 : -1));
 
         setFilteredProducts(filtered);
     };
@@ -117,11 +117,7 @@ let ListProductsComponent = () => {
 
     const handlePriceRangeChange = (value) => {
         const range = priceRanges.find((r) => r.label === value);
-        if (range) {
-            setPriceRange([range.min, range.max]);
-        } else {
-            setPriceRange([0, Infinity]); // Reset if no range selected
-        }
+        setPriceRange(range ? [range.min, range.max] : [0, Infinity]);
     };
 
     const { Title, Text } = Typography;
@@ -192,7 +188,7 @@ let ListProductsComponent = () => {
             <Text type="secondary" style={{ display: "block", marginBottom: "15px" }}>
                 {filteredProducts.length} item(s) found
             </Text>
-                    
+            
             <List
                 grid={{ gutter: 16, column: 4 }}
                 dataSource={filteredProducts.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage)}

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Card, Input, Button, Row, Col, Form, Typography, Upload, Select, notification } from "antd";
 import { modifyStateProperty } from "../../Utils/UtilsState";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { UploadOutlined, PlusCircleTwoTone } from "@ant-design/icons";
 
 const CreateProductComponent = () => {
@@ -10,9 +10,8 @@ const CreateProductComponent = () => {
     const [imageError, setImageError] = useState(false);
     const navigate = useNavigate();
     const categories = [
-        'Electronics', 'Clothing', 'Furniture', 'Toys', 'Books', 'Sports', 'Plants'
+        "Electronics", "Clothing", "Furniture", "Toys", "Books", "Sports", "Plants"
     ];
-
 
     const onFinish = async (values) => {
         if (!formData.image) {
@@ -22,7 +21,7 @@ const CreateProductComponent = () => {
 
         try {
             const response = await fetch(
-                process.env.REACT_APP_BACKEND_BASE_URL + "/products", {
+                `${process.env.REACT_APP_BACKEND_BASE_URL}/products`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -32,21 +31,21 @@ const CreateProductComponent = () => {
                 });
 
             if (response.ok) {
-                let data = await response.json();
+                const data = await response.json();
                 await uploadImage(data.productId);
                 notification.success({
-                    message: 'Product Created',
-                    description: 'Your product has been successfully listed!',
-                    placement: 'bottomRight'
+                    message: "Product Created",
+                    description: "Your product has been successfully listed!",
+                    placement: "topRight"
                 });
                 navigate("/products/own", { state: { refresh: true } });
             } else {
-                let responseBody = await response.json();
+                const responseBody = await response.json();
                 responseBody.errors.forEach(e => {
                     notification.error({
                         message: "Error",
                         description: e.msg,
-                        placement: 'bottomRight'
+                        placement: "topRight"
                     });
                 });
             }
@@ -54,31 +53,34 @@ const CreateProductComponent = () => {
             notification.error({
                 message: "Network Error",
                 description: "An error occurred while trying to submit. Please try again later.",
-                placement: 'bottomRight'
+                placement: "topRight"
             });
         }
     };
 
     const uploadImage = async (productId) => {
-        let formDataPhotos = new FormData();
-        formDataPhotos.append('image', formData.image);
-        formDataPhotos.append('productId', productId);
+        const formDataPhotos = new FormData();
+        formDataPhotos.append("image", formData.image);
+        formDataPhotos.append("productId", productId);
 
-        let response = await fetch(
-            process.env.REACT_APP_BACKEND_BASE_URL + "/products/" + productId + "/image", {
-                method: "POST",
-                headers: { "apikey": localStorage.getItem("apiKey") },
-                body: formDataPhotos
-            });
-        if (!response.ok) {
-            let responseBody = await response.json();
-            let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => console.log("Error: " + e.msg));
+        try {
+            const response = await fetch(
+                `${process.env.REACT_APP_BACKEND_BASE_URL}/products/${productId}/image`, {
+                    method: "POST",
+                    headers: { "apikey": localStorage.getItem("apiKey") },
+                    body: formDataPhotos
+                });
+            if (!response.ok) {
+                const responseBody = await response.json();
+                responseBody.errors.forEach(e => console.error("Error: " + e.msg));
+            }
+        } catch (error) {
+            console.error("Error uploading image: ", error);
         }
     };
 
     return (
-        <Row align="middle" justify="center" style={{ padding:"20px" }}>
+        <Row align="middle" justify="center" style={{ padding: "20px" }}>
             <Col>
                 <Card title={
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -131,7 +133,6 @@ const CreateProductComponent = () => {
                                 placeholder="Enter the item price"
                             />
                         </Form.Item>
-
 
                         <Form.Item
                             label="Category"

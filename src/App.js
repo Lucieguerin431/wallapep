@@ -8,8 +8,8 @@ import ListMyProductsComponent from "./Components/Products/ListMyProductsCompone
 import HomePageComponent from "./Components/Home/HomePageComponent";
 import UserProfile from "./Components/User/UserProfilComponent";
 import TransactionListComponent from "./Components/Transactions/TransactionListComponent";
-import NavigationBarComponent from "./Components/NavigationBarComponent";
-import FooterComponent from "./Components/FooterComponent";
+import NavigationBarComponent from "./Components/Layout/NavigationBarComponent";
+import FooterComponent from "./Components/Layout/FooterComponent";
 
 import {Route, Routes, Link, useNavigate, useLocation } from "react-router-dom"
 import {Layout, Menu, Avatar, Typography, Col, Row, notification } from 'antd';

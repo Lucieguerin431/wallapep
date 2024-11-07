@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,21 +13,21 @@ const ProductCardComponent = ({ product, showCategory = false }) => {
             style={{
                 borderRadius: "8px",
                 overflow: "hidden",
-                position: 'relative',
+                position: "relative",
                 opacity: isSold ? 0.45 : 1,
             }}
         >
             {isSold && (
                 <div style={{
-                    position: 'absolute',
+                    position: "absolute",
                     top: 10,
                     left: 10,
                     backgroundColor: "red",
-                    color: 'white',
-                    padding: '2px 8px',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    borderRadius: '4px',
+                    color: "white",
+                    padding: "2px 8px",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    borderRadius: "4px",
                 }}>
                     SOLD
                 </div>
@@ -36,7 +35,7 @@ const ProductCardComponent = ({ product, showCategory = false }) => {
             <Card.Meta title={product.title} />
 
             {showCategory && (
-                <p style={{ color: 'gray', fontSize: '12px', marginTop: '5px', fontWeight:"bold" }}>
+                <p style={{ color: "gray", fontSize: "12px", marginTop: "5px", fontWeight: "bold" }}>
                     Category: {product.category}
                 </p>
             )}
